@@ -1,70 +1,41 @@
-# Getting Started with Create React App
+# Overview
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The album finder program allows the user to find a specific album of the requested artist. This is possible thanks to 
+the API that Spotify provides to all developers. Not to mention that the program displays a user-friendly search bar
+that prompts the user for an artist. 
 
-## Available Scripts
+Thanks to all the token, url, and documentation provided by the API, the program is straightforward and easy to
+understand. I followed all the documentation that requests and retrieves all the information about the artist by 
+looking for the artist ID number. 
 
-In the project directory, you can run:
+This program allows to all music lovers the possibility to search the albums of the artists that they love. 
+Provides an easy and straightforward way to find albums among thousands of artist around the world.
 
-### `npm start`
+[Album Finder Demonstration](https://www.youtube.com/watch?v=dnTlX1CR97o&ab_channel=FabianDiaz)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+# Web Pages
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Because React is implemented in this project, I only use one JavaScript file that fulfills all the functions of
+the program. It allows to search, request and display the artist ID in the same file. Consequently, it displays 
+the album. Everything in the same JavaScript file.
 
-### `npm test`
+# Development Environment
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+* Spotify For Developers API
+* WebStorm IDE
+* JavaScript
+* React Library
+* Bootstrap Library
 
-### `npm run build`
+# Useful Websites
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+* [Spotify API Documentation.](https://developer.spotify.com/documentation/web-api)
+* [Bootstrap Documentation.](https://getbootstrap.com/docs/4.1/getting-started/introduction/)
+* [WebStorm Documentation.](https://www.jetbrains.com/help/webstorm/getting-started-with-webstorm.html)
+* [Effect Hook Documentation.](https://legacy.reactjs.org/docs/hooks-effect.html)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# Future Work
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+* Implement a function that displays when an album is explicit. 
+* Implement the ability to click on the album and display information about it.
+* Implement the dark mode function on the website.

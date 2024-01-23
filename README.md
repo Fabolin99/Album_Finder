@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Overview
 
 The album finder program allows the user to find a specific album of the requested artist. This is possible thanks to 

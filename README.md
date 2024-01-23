@@ -4,10 +4,6 @@ The album finder program allows the user to find a specific album of the request
 the API that Spotify provides to all developers. Not to mention that the program displays a user-friendly search bar
 that prompts the user for an artist. 
 
-Thanks to all the token, url, and documentation provided by the API, the program is straightforward and easy to
-understand. I followed all the documentation that requests and retrieves all the information about the artist by 
-looking for the artist ID number. 
-
 [Album Finder Demonstration](https://www.youtube.com/watch?v=dnTlX1CR97o&ab_channel=FabianDiaz)
 
 # Development Environment

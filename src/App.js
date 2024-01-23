@@ -1,104 +1,153 @@
-import React from "react";
-//Rather than using an external css file, I Implemented the library below that helped me with the styling.
-import "bootstrap/dist/css/bootstrap.min.css";
-import { Container, InputGroup, FormControl, Button, Row, Card} from 'react-bootstrap';
-//I imported the library below to help me use the user input implementation.
-import { useState, useEffect} from "react";
+// App.js
 
-//I obtained the credentials to use this API by signing up in Spotify.
-const client_id = "c020d529e4654214a8bb7d839948ad33"
-const client_Secret = "7225f3ab66ba4fa9a84f94fc18c844cb"
+import React, { useState, useEffect } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { Container, InputGroup, FormControl, Button, Row, Card } from 'react-bootstrap';
+import "./styles.css"; // Import your CSS file.
+
+// Spotify API credentials
+const clientId = "c020d529e4654214a8bb7d839948ad33";
+const clientSecret = "7225f3ab66ba4fa9a84f94fc18c844cb";
 
 function App() {
-    //I implemented search input using useState.
-    const[searchInput, setSearchInput] = useState("");
-    const[accessToken, setAccessToken] = useState("")
-    const[albums, setAlbums] = useState([]);
+    // Existing state variables
+    const [searchInput, setSearchInput] = useState("");
+    const [accessToken, setAccessToken] = useState("");
+    const [albums, setAlbums] = useState([]);
+    const [artistAvailable, setArtistAvailable] = useState(true);
+    const [selectedAlbum, setSelectedAlbum] = useState(null);
 
+    // Fetch access token from Spotify API on component mount
     useEffect(() => {
-        // API Token.
-        //Spotify's guidelines requires to provide the following information.
-        //Notice, I follow the guidelines provided by Spotify. It is required to display this format in order to
-        //display the information from the API.
-        var parameters = {
-            method: 'Post',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: 'grant_type=client_credentials&client_id=' + client_id + '&client_secret=' + client_Secret
-        }
-        //Fetch allows to request and access token for a client to use.
-        fetch('https://accounts.spotify.com/api/token', parameters)
-            .then(result => result.json())
-            .then(data => setAccessToken(data.access_token))
-    }, [])
+        const fetchAccessToken = async () => {
+            try {
+                // Set up parameters for access token request
+                const parameters = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: `grant_type=client_credentials&client_id=${clientId}&client_secret=${clientSecret}`
+                };
 
-    // Search implementation.
+                // Fetch access token
+                const response = await fetch('https://accounts.spotify.com/api/token', parameters);
+                const { access_token } = await response.json();
+                setAccessToken(access_token);
+            } catch (error) {
+                console.error('Error fetching access token:', error);
+            }
+        };
+
+        // Call the function to fetch access token
+        fetchAccessToken();
+    }, []);
+
+    // Function to handle search
     async function search() {
-        console.log("Search for " + searchInput); // Expected search.
+        console.log("Search for " + searchInput);
 
-        //Artist ID.
-        //Spotify documentation provides this information used.
-        var artistParameters = {
-            method: 'Get',
+        // Parameters for artist search
+        const artistParameters = {
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                //Verifies that you are a legit client.
-                'Authorization': 'Bearer ' + accessToken
+                'Authorization': `Bearer ${accessToken}`
             }
-        }
-        //Get request with Artist ID (displays all the albums of the searched artist.
-        var artist_Id = await fetch('https://api.spotify.com/v1/search?q=' + searchInput + '&type=artist'
-            , artistParameters)
-            .then(response => response.json())
-            .then(data => {return data.artists.items[0].id})
+        };
 
-        //Display albums from artist ID.
-        var returnedAlbums = await fetch('https://api.spotify.com/v1/artists/' + artist_Id + '/albums'
-            + '?include_groups=album&market=US&limit=50', artistParameters)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                setAlbums(data.items);
-            });
+        try {
+            // Fetch artist based on search input
+            const response = await fetch(`https://api.spotify.com/v1/search?q=${searchInput}&type=artist`, artistParameters);
+            const data = await response.json();
+
+            if (data.artists.items.length > 0) {
+                // If artist is available, fetch albums
+                const artistId = data.artists.items[0].id;
+
+                const albumsResponse = await fetch(`https://api.spotify.com/v1/artists/${artistId}/albums?include_groups=album&market=US&limit=50`, artistParameters);
+                const albumsData = await albumsResponse.json();
+                setAlbums(albumsData.items);
+                setArtistAvailable(true);
+            } else {
+                // If artist is not available, update state accordingly
+                setArtistAvailable(false);
+                setAlbums([]); // Clear albums if artist is not available
+            }
+        } catch (error) {
+            // Handle errors during artist or album fetch
+            console.error('Error fetching artist or albums:', error);
+            setArtistAvailable(false);
+            setAlbums([]); // Clear albums in case of an error
+        }
     }
 
-    return(
-        <div className="App">
-            <Container>
-                <InputGroup className="mb-3" size="lg">
-                    <FormControl
-                        //This allows the user to search for an artist whether they click on search or hit enter.
-                    placeholder="Search For Artist"
-                    type="input"
-                    onKeyPress={event => {
-                        if (event.key == "Enter") {
-                            search();
-                        }
-                    }}
-                    onChange={event => setSearchInput(event.target.value)}
-                    />
-                    <Button onClick={search}></Button>
-                </InputGroup>
-            </Container>
-            <Container>
-                <Row className="mx-2 row row-cols-4">
-                    {albums.map( (album, i) => {
-                        return(
-                            // I retrieve all the images from the API provided by Spotify.
-                            <Card>
+    // Function to handle click on album
+    function handleAlbumClick(event, album) {
+        event.preventDefault();
+        setSelectedAlbum(album);
+    }
 
-                                <Card.Img src={album.images[0].url} />
+    // UI rendering
+    return (
+        <Container>
+            <div className="App">
+                {/* Form for artist search */}
+                <form onSubmit={(e) => { e.preventDefault(); search(); }}>
+                    <InputGroup className="mb-3" size="lg">
+                        <FormControl
+                            placeholder="Search For Artist"
+                            type="input"
+                            onChange={event => setSearchInput(event.target.value)}
+                        />
+                        <Button type="submit">Search</Button>
+                    </InputGroup>
+                </form>
+
+                {/* Display error message if artist is not available */}
+                {!artistAvailable && (
+                    <div className="custom-alert">
+                        <img src="error cat.jpg" alt="Error" className="error-image" />
+                        <p>This artist is not available.</p>
+                    </div>
+                )}
+
+                {/* Display albums if available */}
+                {albums.length > 0 && (
+                    <Row className="mx-2 row row-cols-1 row-cols-md-2 row-cols-lg-3">
+                        {/* Map through albums and display as cards */}
+                        {albums.map((album, i) => (
+                            <Card key={i} onClick={(e) => handleAlbumClick(e, album)}>
+                                {album.images && album.images[0] && (
+                                    <Card.Img src={album.images[0].url} alt={album.name} />
+                                )}
                                 <Card.Body>
-                                    <Card.Title>A{album.name}</Card.Title>
+                                    <Card.Title>{album.name}</Card.Title>
+                                    <Card.Text>
+                                        <strong>Artist:</strong> {album.artists.map(artist => artist.name).join(', ')}<br />
+                                        <strong>Release Date:</strong> {album.release_date}<br />
+                                    </Card.Text>
                                 </Card.Body>
                             </Card>
-                        )
-                    })}
-                </Row>
-            </Container>
-        </div>
-    )
+                        ))}
+                    </Row>
+                )}
+
+                {/* Display selected album information */}
+                {selectedAlbum && (
+                    <div className="selected-album-info">
+                        <h2>{selectedAlbum.name}</h2>
+                        <p>
+                            <strong>Artist:</strong> {selectedAlbum.artists.map(artist => artist.name).join(', ')}<br />
+                            <strong>Release Date:</strong> {selectedAlbum.release_date}<br />
+                            <strong>Open on Spotify:</strong> <a href={selectedAlbum.external_urls.spotify} target="_blank" rel="noopener noreferrer">Open</a>
+                        </p>
+                        <Button onClick={() => setSelectedAlbum(null)}>Close</Button>
+                    </div>
+                )}
+            </div>
+        </Container>
+    );
 }
 
 export default App;

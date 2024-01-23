@@ -1,0 +1,56 @@
+/* styles.css */
+
+/* Overall styling for the main application container */
+.App {
+    text-align: center;
+    padding: 20px;
+}
+
+/* Styling for the alert when an artist is not available */
+.custom-alert {
+    background-color: #ffcccc;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
+/* Styling for the error image within the alert */
+.error-image {
+    width: 250px; /* Adjust the width as needed */
+}
+
+/* Margin for the cards in the album display row */
+.row-cols-1 > div {
+    margin: 10px;
+}
+
+/* Styling for the container of selected album information */
+.selected-album-info {
+    background-color: #f0f0f0;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 5px;
+}
+
+/* Styling for the title within the selected album information */
+.selected-album-info h2 {
+    margin-bottom: 10px;
+}
+
+/* Styling for paragraphs within the selected album information */
+.selected-album-info p {
+    margin-bottom: 15px;
+}
+
+/* Styling for links within the selected album information */
+.selected-album-info a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+/* Hover effect for links within the selected album information */
+.selected-album-info a:hover {
+    text-decoration: underline;
+}
+
+/* Add more styles as needed */
